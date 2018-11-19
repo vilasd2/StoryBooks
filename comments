@@ -1,0 +1,17 @@
+C1:scope: is set of permissions requested to user
+
+C2 : For other authentications such as twitter or facebook, googleID should not be set to required
+
+C3 : photos:
+   [ { value: 'https://lh5.googleusercontent.com/-szReD5B-Upg/AAAAAAAAAAI/AAAAAAAAADw/WCGgCaZXCKg/photo.jpg?sz=50' } ]
+
+   Here we want to remove '?sz=50' from the givesn string, Os use substring fucntion
+   substring(0,profile.photos[0].value.indexOf('?') Here, 0 indicates end of string 
+   ignore evrything after the ?
+
+C4: at the end of any strategy, done is executed. it takes 2 params done(error,user)// here no error, so its null
+
+C5: Why use CK Editor? 
+Ans: When we make paragraph in textarea, it should get saved as it is and when displayed, it should show the paragraphs, that is why use CK Editor
+
+C6: For any request you can check if a user is authenticated or not using this method.
