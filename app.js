@@ -1,14 +1,16 @@
 const express = require('express');
 const path = require('path');
 const expshbs = require('express-handlebars');
+const bodyParser = require('body-parser');
+const methodOverride = require('method-override');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const passport = require('passport');
 
-// Load user module
+// Load DB models
 require('./models/User');
-
+require('./models/Story');
 // Passport config
 require('./config/passport')(passport);
 
@@ -20,6 +22,14 @@ const stories = require('./routes/stories');
 
 // Load keys
 const keys = require('./config/keys');
+
+// Handlebars helpers
+const {
+    truncate,
+    stripTags,
+    formatDate,
+    select
+} = require('./helpers/hbs');
 
 // Map global promise
 mongoose.Promise = global.Promise;
@@ -36,10 +46,24 @@ mongoose.connect(keys.mongoURI, { useNewUrlParser: true })
 
 const app = express();
 
+// Body parser middleware
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+// Method override middleware
+app.use(methodOverride('_method'));
+
+
 // Handlebars middleware
-app.engine('handlebars',expshbs({
-    defaultLayout : 'main'
-}));
+app.engine('handlebars', expshbs({
+    helpers : {
+        truncate : truncate,
+        stripTags : stripTags,
+        formatDate : formatDate,
+        select : select
+    },
+    defaultLayout: 'main'
+})); 
 app.set('view engine', 'handlebars');
 
 
@@ -62,12 +86,12 @@ app.use((req, res, next) => {
 })
 
 // Set static folder
-app.use(express.static(path.join(__dirname,'public')));     // Very important, How to create static folder ?
+app.use(express.static(path.join(__dirname, 'public')));     // Very important, How to create static folder ?
 
 //use routes
 app.use('/auth', auth);
 app.use('/', index);
-app.use('/stories',stories);
+app.use('/stories', stories);
 
 
 var port = process.env.PORT || 5000;
