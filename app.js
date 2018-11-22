@@ -28,7 +28,8 @@ const {
     truncate,
     stripTags,
     formatDate,
-    select
+    select,
+    editIcon
 } = require('./helpers/hbs');
 
 // Map global promise
@@ -56,14 +57,15 @@ app.use(methodOverride('_method'));
 
 // Handlebars middleware
 app.engine('handlebars', expshbs({
-    helpers : {
-        truncate : truncate,
-        stripTags : stripTags,
-        formatDate : formatDate,
-        select : select
+    helpers: {
+        truncate: truncate,
+        stripTags: stripTags,
+        formatDate: formatDate,
+        select: select,
+        editIcon: editIcon
     },
     defaultLayout: 'main'
-})); 
+}));
 app.set('view engine', 'handlebars');
 
 
